@@ -114,7 +114,6 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 using namespace std;
-using namespace rapidjson;
 extern int yylex();
 extern void yyerror(char*);
 void yyerror(const char *str)
@@ -146,13 +145,13 @@ void yyerror(const char *str)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 21 "bisoner.y"
+#line 20 "bisoner.y"
 {
   std::string *str;
   int number;
 }
 /* Line 193 of yacc.c.  */
-#line 156 "bisoner.tab.c"
+#line 155 "bisoner.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -165,7 +164,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 169 "bisoner.tab.c"
+#line 168 "bisoner.tab.c"
 
 #ifdef short
 # undef short
@@ -457,9 +456,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    30,    34,    36,    38,    40,    42,    44,
-      46,    48,    50,    52,    57,    61,    65,    71,    76,    81,
-      87,    93
+       0,    28,    28,    29,    33,    35,    37,    39,    41,    43,
+      45,    47,    49,    51,    56,    60,    64,    70,    75,    80,
+      86,    92
 };
 #endif
 
@@ -1393,63 +1392,63 @@ yyreduce:
   switch (yyn)
     {
         case 13:
-#line 53 "bisoner.y"
+#line 52 "bisoner.y"
     {
             printf(" File %s HAS BEEN IMPORTED for location number %d \n",(yyvsp[(5) - (6)].str),(yyvsp[(3) - (6)].number) );
         ;}
     break;
 
   case 14:
-#line 58 "bisoner.y"
+#line 57 "bisoner.y"
     {
             printf("rent for house no 4 is %d \n",(yyvsp[(7) - (9)].number));
         ;}
     break;
 
   case 15:
-#line 62 "bisoner.y"
+#line 61 "bisoner.y"
     {
             printf("prices set to %d\n",(yyvsp[(10) - (10)].number) );
         ;}
     break;
 
   case 16:
-#line 66 "bisoner.y"
+#line 65 "bisoner.y"
     {
 				printf("Currency set to %s",(yyvsp[(2) - (2)].str));
 			;}
     break;
 
   case 17:
-#line 72 "bisoner.y"
+#line 71 "bisoner.y"
     {
 			printf("location number %d  set to  %s in froup number %d",(yyvsp[(3) - (6)].number),(yyvsp[(4) - (6)].str),(yyvsp[(6) - (6)].number));
 			;}
     break;
 
   case 18:
-#line 77 "bisoner.y"
+#line 76 "bisoner.y"
     {
             printf("starting money set to %d \n",(yyvsp[(2) - (2)].number) );
             ;}
     break;
 
   case 19:
-#line 82 "bisoner.y"
+#line 81 "bisoner.y"
     {
                 printf("jailfine set to %d\n",(yyvsp[(2) - (2)].number));
             ;}
     break;
 
   case 20:
-#line 88 "bisoner.y"
+#line 87 "bisoner.y"
     {
                 printf("Route set up between location no %d and %d\n",(yyvsp[(3) - (5)].number),(yyvsp[(5) - (5)].number));
             ;}
     break;
 
   case 21:
-#line 94 "bisoner.y"
+#line 93 "bisoner.y"
     {
             printf("tax set to %d percent\n",(yyvsp[(2) - (4)].number) );
         ;}
@@ -1457,7 +1456,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1461 "bisoner.tab.c"
+#line 1460 "bisoner.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1671,7 +1670,7 @@ yyreturn:
 }
 
 
-#line 99 "bisoner.y"
+#line 98 "bisoner.y"
 
 
 
@@ -1683,25 +1682,14 @@ extern FILE * yyin;
 
 int main()
 {
-        yyin=fopen("config.txt","r");
-        yyparse();
-        
-        
-        // 1. Parse a JSON string into DOM.
-        const char* json = "{\"project\":\"rapidjson\",\"stars\":10}";
-        Document d;
-        d.Parse(json);
-        
-        // 2. Modify it by DOM.
-        Value& s = d["stars"];
-        s.SetInt(s.GetInt() + 1);
-        
-        // 3. Stringify the DOM
-        StringBuffer buffer;
-        Writer<StringBuffer> writer(buffer);
-        d.Accept(writer);
-        
-        // Output {"project":"rapidjson","stars":11}
-        printf("%s",buffer.GetString());
-        return 1;
+    yyin=fopen("config.txt","r");
+    yyparse();
+    
+    string json="{ \"hello\" : \"world\"} ";
+    rapidjson::Document d;
+    d.Parse<0>(json.c_str());
+
+    printf("%s\n", d["hello"].GetString());
+
+    return 1;
 } 
