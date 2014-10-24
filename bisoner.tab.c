@@ -110,12 +110,15 @@
 
 #include <stdio.h>
 #include <string>
+#include <map>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include "Monopoly.h"
 using namespace std;
 extern int yylex();
 extern void yyerror(char*);
+Monopoly game;
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
@@ -145,13 +148,13 @@ void yyerror(const char *str)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "bisoner.y"
+#line 23 "bisoner.y"
 {
   std::string *str;
   int number;
 }
 /* Line 193 of yacc.c.  */
-#line 155 "bisoner.tab.c"
+#line 158 "bisoner.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -164,7 +167,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 168 "bisoner.tab.c"
+#line 171 "bisoner.tab.c"
 
 #ifdef short
 # undef short
@@ -456,9 +459,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    28,    28,    29,    33,    35,    37,    39,    41,    43,
-      45,    47,    49,    51,    56,    60,    64,    70,    75,    80,
-      86,    92
+       0,    31,    31,    32,    36,    38,    40,    42,    44,    46,
+      48,    50,    52,    54,    59,    63,    67,    75,    80,    85,
+      91,    97
 };
 #endif
 
@@ -1392,63 +1395,65 @@ yyreduce:
   switch (yyn)
     {
         case 13:
-#line 52 "bisoner.y"
+#line 55 "bisoner.y"
     {
             printf(" File %s HAS BEEN IMPORTED for location number %d \n",(yyvsp[(5) - (6)].str),(yyvsp[(3) - (6)].number) );
         ;}
     break;
 
   case 14:
-#line 57 "bisoner.y"
+#line 60 "bisoner.y"
     {
             printf("rent for house no 4 is %d \n",(yyvsp[(7) - (9)].number));
         ;}
     break;
 
   case 15:
-#line 61 "bisoner.y"
+#line 64 "bisoner.y"
     {
             printf("prices set to %d\n",(yyvsp[(10) - (10)].number) );
         ;}
     break;
 
   case 16:
-#line 65 "bisoner.y"
+#line 68 "bisoner.y"
     {
-				printf("Currency set to %s",(yyvsp[(2) - (2)].str));
+				
+                game.currency=((yyvsp[(2) - (2)].str));
+                printf("Currency set to %s",game.currency->c_str());
 			;}
     break;
 
   case 17:
-#line 71 "bisoner.y"
+#line 76 "bisoner.y"
     {
 			printf("location number %d  set to  %s in froup number %d",(yyvsp[(3) - (6)].number),(yyvsp[(4) - (6)].str),(yyvsp[(6) - (6)].number));
 			;}
     break;
 
   case 18:
-#line 76 "bisoner.y"
+#line 81 "bisoner.y"
     {
             printf("starting money set to %d \n",(yyvsp[(2) - (2)].number) );
             ;}
     break;
 
   case 19:
-#line 81 "bisoner.y"
+#line 86 "bisoner.y"
     {
                 printf("jailfine set to %d\n",(yyvsp[(2) - (2)].number));
             ;}
     break;
 
   case 20:
-#line 87 "bisoner.y"
+#line 92 "bisoner.y"
     {
                 printf("Route set up between location no %d and %d\n",(yyvsp[(3) - (5)].number),(yyvsp[(5) - (5)].number));
             ;}
     break;
 
   case 21:
-#line 93 "bisoner.y"
+#line 98 "bisoner.y"
     {
             printf("tax set to %d percent\n",(yyvsp[(2) - (4)].number) );
         ;}
@@ -1456,7 +1461,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1460 "bisoner.tab.c"
+#line 1465 "bisoner.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1670,7 +1675,7 @@ yyreturn:
 }
 
 
-#line 98 "bisoner.y"
+#line 103 "bisoner.y"
 
 
 
@@ -1685,11 +1690,11 @@ int main()
     yyin=fopen("config.txt","r");
     yyparse();
     
+    
     string json="{ \"hello\" : \"world\"} ";
     rapidjson::Document d;
     d.Parse<0>(json.c_str());
-
+    
     printf("%s\n", d["hello"].GetString());
-
     return 1;
 } 

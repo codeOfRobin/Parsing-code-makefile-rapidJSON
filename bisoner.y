@@ -5,9 +5,11 @@
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include "Monopoly.h"
 using namespace std;
 extern int yylex();
 extern void yyerror(char*);
+Monopoly game;
 void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
@@ -64,7 +66,9 @@ cost_set:COSTTOKEN LTOKEN INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGE
         }
 currency_set:CURRENCYTOKEN WORD
 			{
-				printf("Currency set to %s",$2);
+				
+                game.currency=($2);
+                printf("Currency set to %s",game.currency->c_str());
 			}
 			
 location_set:
@@ -116,6 +120,5 @@ int main()
     d.Parse<0>(json.c_str());
     
     printf("%s\n", d["hello"].GetString());
-
     return 1;
 } 

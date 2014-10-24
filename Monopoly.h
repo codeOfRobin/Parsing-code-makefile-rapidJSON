@@ -12,18 +12,21 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "City.h"
+#include "Player.h"
 const int MAX_NO_OF_CITIES=50;
 using namespace std;
 
 class Monopoly
 {
 public:
-    string currency;
+    string* currency;
     float startingMoney;
     float jailFine;
     float taxPercent;
-    BOOL graph[][MAX_NO_OF_CITIES];
-    
+    bool graph[MAX_NO_OF_CITIES][MAX_NO_OF_CITIES];
+    vector <City> cities;
+    vector <Player> players;
     
 };
 #endif /* defined(____Monopoly__) */
