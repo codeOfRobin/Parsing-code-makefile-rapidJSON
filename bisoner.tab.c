@@ -123,7 +123,6 @@ void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
 }
- 
 
 
 
@@ -154,7 +153,7 @@ typedef union YYSTYPE
   int number;
 }
 /* Line 193 of yacc.c.  */
-#line 158 "bisoner.tab.c"
+#line 157 "bisoner.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -167,7 +166,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 171 "bisoner.tab.c"
+#line 170 "bisoner.tab.c"
 
 #ifdef short
 # undef short
@@ -1461,7 +1460,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1465 "bisoner.tab.c"
+#line 1464 "bisoner.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1685,12 +1684,12 @@ int yywrap()
 } 
 extern FILE * yyin;
 
-int main()
+int bisonParser()
 {
     yyin=fopen("config.txt","r");
     yyparse();
     
-    
+    std::cout<<game.currency->c_str();
     string json="{ \"hello\" : \"world\"} ";
     rapidjson::Document d;
     d.Parse<0>(json.c_str());

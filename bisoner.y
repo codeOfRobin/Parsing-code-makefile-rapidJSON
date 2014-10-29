@@ -14,10 +14,10 @@ void yyerror(const char *str)
 {
         fprintf(stderr,"error: %s\n",str);
 }
- 
 
 
 %}
+
 %token LTOKEN INTEGER LOCATIONWORD WORD GTOKEN CURRENCYTOKEN JAILFINETOKEN STARTINGMONEYTOKEN RTOKEN COSTTOKEN RENTTOKEN FILEPATHTOKEN OBJEXTENSION MODELTOKEN TAXTOKEN PERCENTSIGN
 
 %union{
@@ -109,12 +109,12 @@ int yywrap()
 } 
 extern FILE * yyin;
 
-int main()
+int bisonParser()
 {
     yyin=fopen("config.txt","r");
     yyparse();
     
-    
+    std::cout<<game.currency->c_str();
     string json="{ \"hello\" : \"world\"} ";
     rapidjson::Document d;
     d.Parse<0>(json.c_str());
