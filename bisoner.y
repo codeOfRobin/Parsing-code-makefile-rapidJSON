@@ -68,13 +68,17 @@ currency_set:CURRENCYTOKEN WORD
 			{
 				
                 game.currency=($2);
-                printf("Currency set to %s",game.currency->c_str());
 			}
 			
 location_set:
 			LOCATIONWORD LTOKEN INTEGER WORD GTOKEN INTEGER
 			{
-			printf("location number %d  set to  %s in froup number %d",$3,$4,$6);
+            Location newCity;
+            newCity.locationNo=$3;
+            newCity.name=($4);
+            newCity.group=$6;
+            game.locations.push_back(newCity);
+            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name->c_str(),newCity.group );
 			}
 startingMoney_set:
             STARTINGMONEYTOKEN INTEGER

@@ -459,8 +459,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    31,    31,    32,    36,    38,    40,    42,    44,    46,
-      48,    50,    52,    54,    59,    63,    67,    75,    80,    85,
-      91,    97
+      48,    50,    52,    54,    59,    63,    67,    74,    84,    89,
+      95,   101
 };
 #endif
 
@@ -1419,40 +1419,44 @@ yyreduce:
     {
 				
                 game.currency=((yyvsp[(2) - (2)].str));
-                printf("Currency set to %s",game.currency->c_str());
 			;}
     break;
 
   case 17:
-#line 76 "bisoner.y"
+#line 75 "bisoner.y"
     {
-			printf("location number %d  set to  %s in froup number %d",(yyvsp[(3) - (6)].number),(yyvsp[(4) - (6)].str),(yyvsp[(6) - (6)].number));
+            Location newCity;
+            newCity.locationNo=(yyvsp[(3) - (6)].number);
+            
+            newCity.group=(yyvsp[(6) - (6)].number);
+            game.locations.push_back(newCity);
+            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name->c_str(),newCity.group );
 			;}
     break;
 
   case 18:
-#line 81 "bisoner.y"
+#line 85 "bisoner.y"
     {
             printf("starting money set to %d \n",(yyvsp[(2) - (2)].number) );
             ;}
     break;
 
   case 19:
-#line 86 "bisoner.y"
+#line 90 "bisoner.y"
     {
                 printf("jailfine set to %d\n",(yyvsp[(2) - (2)].number));
             ;}
     break;
 
   case 20:
-#line 92 "bisoner.y"
+#line 96 "bisoner.y"
     {
                 printf("Route set up between location no %d and %d\n",(yyvsp[(3) - (5)].number),(yyvsp[(5) - (5)].number));
             ;}
     break;
 
   case 21:
-#line 98 "bisoner.y"
+#line 102 "bisoner.y"
     {
             printf("tax set to %d percent\n",(yyvsp[(2) - (4)].number) );
         ;}
@@ -1460,7 +1464,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1464 "bisoner.tab.c"
+#line 1468 "bisoner.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1674,7 +1678,7 @@ yyreturn:
 }
 
 
-#line 103 "bisoner.y"
+#line 107 "bisoner.y"
 
 
 

@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "City.h"
+#include "Location.h"
 #include "Player.h"
 const int MAX_NO_OF_CITIES=50;
 using namespace std;
@@ -25,7 +25,7 @@ public:
     float jailFine;
     float taxPercent;
     bool graph[MAX_NO_OF_CITIES][MAX_NO_OF_CITIES];
-    vector <City> cities;
+    vector <Location> locations;
     vector <Player> players;
     
 };
