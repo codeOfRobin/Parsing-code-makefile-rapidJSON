@@ -1,8 +1,12 @@
 #include <iostream>
+#include "Monopoly.h"
 extern int bisonParser();
+extern Monopoly game;
 int main(int argc, char const *argv[])
 {
-	
+    std::cout<<game.locations.size()<<endl<<"somethin";
 	std::cout<<bisonParser()<<"I rock";
-	return 0;
+    std::cout<<game.currency->c_str();
+
+    return 0;
 }
