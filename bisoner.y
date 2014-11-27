@@ -2,9 +2,12 @@
 #include <stdio.h>
 #include <string>
 #include <map>
+#include <fstream>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include "Monopoly.h"
 using namespace std;
 extern int yylex();
@@ -67,7 +70,7 @@ cost_set:COSTTOKEN LTOKEN INTEGER INTEGER INTEGER INTEGER INTEGER INTEGER INTEGE
 currency_set:CURRENCYTOKEN WORD
 			{
 				
-                game.currency=($2);
+                game.currency=*($2);
 			}
 			
 location_set:
@@ -75,32 +78,38 @@ location_set:
 			{
             Location newCity;
             newCity.locationNo=$3;
-            newCity.name=($4);
+            newCity.name=*($4);
             newCity.group=$6;
             game.locations.push_back(newCity);
-            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name->c_str(),newCity.group );
+            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name.c_str(),newCity.group );
 			}
 startingMoney_set:
             STARTINGMONEYTOKEN INTEGER
             {
-            printf("starting money set to %d \n",$2 );
+                game.startingMoney=$2;
+            
+            printf("starting money set to %f \n",game.startingMoney);
             }
 jailFine_set:
             JAILFINETOKEN INTEGER
             {
-                printf("jailfine set to %d\n",$2);
+                game.jailFine=$2;
+                printf("jailfine set to %f\n",game.jailFine);
             }
 
 route_add:
             RTOKEN LTOKEN INTEGER LTOKEN INTEGER
             {
-                printf("Route set up between location no %d and %d\n",$3,$5);
+                game.graph[$3][$5]=true;
+                printf("Route set up between location no %d \n",game.graph[$3][$5]);
             }
 
 tax_set:
         TAXTOKEN INTEGER PERCENTSIGN INTEGER
         {
-            printf("tax set to %d percent\n",$2 );
+            game.taxPercent=$2;
+            game.taxAmount=$4;
+            printf("tax set to %f percent\n",game.taxPercent );
         }
 
 
@@ -118,11 +127,21 @@ int bisonParser()
     yyin=fopen("config.txt","r");
     yyparse();
     
-    std::cout<<game.currency->c_str();
+    std::cout<<game.currency.c_str();
     string json="{ \"hello\" : \"world\"} ";
     rapidjson::Document d;
     d.Parse<0>(json.c_str());
     
     printf("%s\n", d["hello"].GetString());
+    
+    ofstream ofs("filename");
+    
+    // save data to archive
+    {
+        boost::archive::text_oarchive oa(ofs);
+        // write class instance to archive
+        oa << game;
+    	// archive and stream closed when destructors are called
+    }
     return 1;
 } 

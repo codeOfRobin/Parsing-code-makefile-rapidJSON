@@ -80,7 +80,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 23 "bisoner.y"
+#line 26 "bisoner.y"
 {
   std::string *str;
   int number;

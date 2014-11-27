@@ -111,9 +111,12 @@
 #include <stdio.h>
 #include <string>
 #include <map>
+#include <fstream>
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 #include "Monopoly.h"
 using namespace std;
 extern int yylex();
@@ -147,13 +150,13 @@ void yyerror(const char *str)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 23 "bisoner.y"
+#line 26 "bisoner.y"
 {
   std::string *str;
   int number;
 }
 /* Line 193 of yacc.c.  */
-#line 157 "bisoner.tab.c"
+#line 160 "bisoner.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -166,7 +169,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 170 "bisoner.tab.c"
+#line 173 "bisoner.tab.c"
 
 #ifdef short
 # undef short
@@ -458,9 +461,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    31,    31,    32,    36,    38,    40,    42,    44,    46,
-      48,    50,    52,    54,    59,    63,    67,    74,    84,    89,
-      95,   101
+       0,    34,    34,    35,    39,    41,    43,    45,    47,    49,
+      51,    53,    55,    57,    62,    66,    70,    77,    87,    94,
+     101,   108
 };
 #endif
 
@@ -1394,77 +1397,83 @@ yyreduce:
   switch (yyn)
     {
         case 13:
-#line 55 "bisoner.y"
+#line 58 "bisoner.y"
     {
             printf(" File %s HAS BEEN IMPORTED for location number %d \n",(yyvsp[(5) - (6)].str),(yyvsp[(3) - (6)].number) );
         ;}
     break;
 
   case 14:
-#line 60 "bisoner.y"
+#line 63 "bisoner.y"
     {
             printf("rent for house no 4 is %d \n",(yyvsp[(7) - (9)].number));
         ;}
     break;
 
   case 15:
-#line 64 "bisoner.y"
+#line 67 "bisoner.y"
     {
             printf("prices set to %d\n",(yyvsp[(10) - (10)].number) );
         ;}
     break;
 
   case 16:
-#line 68 "bisoner.y"
+#line 71 "bisoner.y"
     {
 				
-                game.currency=((yyvsp[(2) - (2)].str));
+                game.currency=*((yyvsp[(2) - (2)].str));
 			;}
     break;
 
   case 17:
-#line 75 "bisoner.y"
+#line 78 "bisoner.y"
     {
             Location newCity;
             newCity.locationNo=(yyvsp[(3) - (6)].number);
-            
+            newCity.name=*((yyvsp[(4) - (6)].str));
             newCity.group=(yyvsp[(6) - (6)].number);
             game.locations.push_back(newCity);
-            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name->c_str(),newCity.group );
+            printf("new city %d named %s in group %d\n",newCity.locationNo,newCity.name.c_str(),newCity.group );
 			;}
     break;
 
   case 18:
-#line 85 "bisoner.y"
+#line 88 "bisoner.y"
     {
-            printf("starting money set to %d \n",(yyvsp[(2) - (2)].number) );
+                game.startingMoney=(yyvsp[(2) - (2)].number);
+            
+            printf("starting money set to %f \n",game.startingMoney);
             ;}
     break;
 
   case 19:
-#line 90 "bisoner.y"
+#line 95 "bisoner.y"
     {
-                printf("jailfine set to %d\n",(yyvsp[(2) - (2)].number));
+                game.jailFine=(yyvsp[(2) - (2)].number);
+                printf("jailfine set to %f\n",game.jailFine);
             ;}
     break;
 
   case 20:
-#line 96 "bisoner.y"
+#line 102 "bisoner.y"
     {
-                printf("Route set up between location no %d and %d\n",(yyvsp[(3) - (5)].number),(yyvsp[(5) - (5)].number));
+                game.graph[(yyvsp[(3) - (5)].number)][(yyvsp[(5) - (5)].number)]=true;
+                printf("Route set up between location no %d \n",game.graph[(yyvsp[(3) - (5)].number)][(yyvsp[(5) - (5)].number)]);
             ;}
     break;
 
   case 21:
-#line 102 "bisoner.y"
+#line 109 "bisoner.y"
     {
-            printf("tax set to %d percent\n",(yyvsp[(2) - (4)].number) );
+            game.taxPercent=(yyvsp[(2) - (4)].number);
+            game.taxAmount=(yyvsp[(4) - (4)].number);
+            printf("tax set to %f percent\n",game.taxPercent );
         ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1468 "bisoner.tab.c"
+#line 1477 "bisoner.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1678,7 +1687,7 @@ yyreturn:
 }
 
 
-#line 107 "bisoner.y"
+#line 116 "bisoner.y"
 
 
 
@@ -1693,11 +1702,21 @@ int bisonParser()
     yyin=fopen("config.txt","r");
     yyparse();
     
-    std::cout<<game.currency->c_str();
+    std::cout<<game.currency.c_str();
     string json="{ \"hello\" : \"world\"} ";
     rapidjson::Document d;
     d.Parse<0>(json.c_str());
     
     printf("%s\n", d["hello"].GetString());
+    
+    ofstream ofs("filename");
+    
+    // save data to archive
+    {
+        boost::archive::text_oarchive oa(ofs);
+        // write class instance to archive
+        oa << game;
+    	// archive and stream closed when destructors are called
+    }
     return 1;
 } 
